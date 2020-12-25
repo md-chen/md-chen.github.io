@@ -1,0 +1,182 @@
+<!--
+ * @Author: md-chen
+ * @Date: 2020-12-23 19:40:09
+ * @LastEditTime: 2020-12-25 19:14:27
+ * @LastEditors: Please set LastEditors
+ * @Description: 入口html
+ * @FilePath: /study/docs/index.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <style>
+    * {
+      text-decoration : none;
+    }
+    .app-sub-sidebar li:before {
+      content: '';
+    }
+    .sidebar ul li a:hover {
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/#/notes/environment">中文</a>
+  </nav>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      el: '#app',
+      name: '前端学习总结',
+      repo: 'https://github.com/md-chen/md-chen.github.io', // 配置仓库地址或者 username/repo 的字符串，会在页面右上角渲染一个 GitHub Corner 挂件。
+      // homepage: 'README.md', // 设置首页文件加载路径。适合不想将 README.md 作为入口文件渲染，或者是文档存放在其他位置的情况使用。
+      coverpage: true, // 启用封面页。开启后是加载 _coverpage.md 文件，也可以自定义文件名。
+      // logo: '/_media/icon.svg', // 在侧边栏中出现的网站图标，你可以使用CSS来更改大小
+      relativePath: true, // 启用相对路径
+      loadNavbar: true, // 导航栏
+      loadSidebar: true, // 加载自定义侧边栏
+      maxLevel: 2, // 默认情况下会抓取文档中所有标题渲染成目录，可配置最大支持渲染的标题层级。
+      subMaxLevel: 4, // 生成目录的最大层级
+      autoHeader: true,
+      auto2top: true,
+      executeScript: true,
+      mergeNavbar: true, // 小屏设备下合并导航栏到侧边栏
+      formatUpdated: '{MM}/{DD} {HH}:{mm}', // 我们可以通过 {docsify-updated} 变量显示文档更新日期. 并且通过 formatUpdated配置日期格式。参考 https://github.com/lukeed/tinydate#patterns
+      onlyCover: false, // 只在访问主页时加载封面。
+      topMargin: 90, // 让你的内容页在滚动到指定的锚点时，距离页面顶部有一定空间。当你使用 固定页头 布局时这个选项很有用，可以让你的锚点对齐标题栏。
+      ext: '.md', // 资源的文件扩展名。
+      notFoundPage: true, // 在找不到指定页面时加载_404.md:
+      alias: { // 定义路由别名，可以更自由的定义路由规则。 支持正则
+        '/.*/_sidebar.md': '/_sidebar.md',//防止意外回退
+        '/.*/_navbar.md': '/_navbar.md',
+        '/.*/_404.md': '/_404.md',
+      },
+      pagination: {
+        previousText: '我要返回了',
+        nextText: '去下一页啦',
+      },
+      notFoundPage: {
+        // '/': '_404.md',
+        '/': 'notes/environment'
+      },
+      search: {
+        placeholder: '搜索',
+        noData: '哎呀! 空空如也了~',
+        depth: 3
+      },
+      plugins: [
+        function (hook, vm) {
+          hook.doneEach(function(){
+            let path = vm.route.path.split('/').join('');
+            let domObj = Docsify.dom;
+            let main = domObj.getNode("#main");
+            Array.apply(null,document.querySelectorAll("div.gitTalk-container")).forEach(function(ele){
+              ele.remove();
+            });
+            
+            let divEle = domObj.create("div");
+            divEle.id = `gitTalk-container-${path}`;
+            divEle.className = "gitTalk-container";
+            divEle.style = `width: ${main.clientWidth}px; margin: 0 auto 20px;`;
+            domObj.appendTo(domObj.find(".content"), divEle);
+          })
+        },
+      ]
+    }
+  </script>
+  <!-- Docsify v4 -->
+  <script src="//unpkg.com/docsify"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/search.js"></script>
+  <!-- 添加代码高亮 -->
+  <script src="//unpkg.com/prismjs/components/prism-bash.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-java.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-sql.js"></script>
+  <!-- 添加一键拷贝代码 -->
+  <script src="//unpkg.com/docsify-copy-code"></script>
+  <!-- emoji -->
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
+  <!-- 外链脚本 - External Script -->
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/external-script.min.js"></script>
+  <!-- 图片缩放 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <!-- 分页 -->
+  <script src="//unpkg.com/docsify-pagination/dist/docsify-pagination.min.js"></script>
+    <script src="./custom/js/backtop.js"></script>
+    <script>
+      let fadeTime = 1500;
+      let animateTime = 1000;
+      let height = 100;
+      let hList = [];
+      $(function() {
+        let back2Top = $("#back-to-top");
+        let docDirectory = $('.doc-directory');
+  
+        $(window).scroll(function() {
+          if (!tContent.is(':hidden')) {
+            tContent.fadeOut(500);
+          }
+          if ($(window).scrollTop() > height) {
+            back2Top.fadeIn(fadeTime);
+          } else {
+            back2Top.fadeOut(fadeTime);
+          }
+        });
+        back2Top.draggable();
+        back2Top.click(function() {
+          back2Top.animate({ top: 'toggle' }, animateTime);
+          if ($('html').scrollTop()) {
+            $('html').animate({ scrollTop: 0 }, animateTime);
+            return false;
+          }
+          $('body').animate({ scrollTop: 0 }, animateTime);
+          return false;            
+        });
+  
+        // doc directory
+        let tContent = $('.title-content');
+        
+        // docDirectory.draggable();
+        $('.header').click(function(e) {
+          e.stopPropagation();
+          if (tContent.is(':hidden')) {
+            tContent.fadeIn(500);
+          } else {
+            tContent.fadeOut(500);
+          }
+          setTitle({
+            docDirectory,
+            tContent
+          });
+        });
+  
+        $(window).bind('hashchange', function() {
+          const active = document.querySelector('.active');
+          if (active) {
+            active.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+            });
+          }
+          setTitle({
+            docDirectory,
+            tContent,
+          });
+        });
+      });
+    </script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-150864629-1');
+    </script>
+</body>
+</html>
